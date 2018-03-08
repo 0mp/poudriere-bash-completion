@@ -280,6 +280,32 @@ _poudriere()
                 ;;
 
             logclean)
+                case "$prev" in
+                    -N)
+                        COMPREPLY=($(compgen -W "0 1 2 3 4 5 6 7 8 9"))
+                        compopt -o nospace
+                        ;;
+                    -j)
+                        _poudriere_jails_list
+                        ;;
+                    -B)
+                        compopt -o default
+                        ;;
+                    -p)
+                        _poudriere_ports_list
+                        ;;
+                    -z)
+                        _poudriere_set_list
+                        ;;
+                    *)
+                        if [[ $cur =~ ^([[:digit:]])+$ ]]; then
+                            COMPREPLY=(0 1 2 3 4 5 6 7 8 9)
+                            compopt -o nospace
+                        else
+                            COMPREPLY=($(compgen -W '0 1 2 3 4 5 6 7 8 9 -a -N -j -n -B -p -y -v -z' -- "$cur"))
+                        fi
+                        ;;
+                esac
                 ;;
 
             ports)
