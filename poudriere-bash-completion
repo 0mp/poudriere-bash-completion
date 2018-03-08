@@ -1,0 +1,157 @@
+# vim: filetype=sh
+#
+# SPDX-License-Identifier: BSD-2-Clause-FreeBSD
+#
+# Copyright (c) 2018 Matusz Piotrowski <0mp@FreeBSD.org>
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+# SUCH DAMAGE.
+
+_poudriere_freebsd_version() {
+    # XXX: It might be non exhaustive.
+    # For example it does not include options like:
+    # stable/11, stable/10@123456
+    COMPREPLY+=($(compgen -W "10.3 10.4 11.1" -S '-RELEASE' -- "$cur"))
+    COMPREPLY+=($(compgen -W "10.4 11.1" -S '-STABLE' -- "$cur"))
+    COMPREPLY+=($(compgen -W "12.0" -S '-CURRENT' -- "$cur"))
+}
+
+# TODO: It cannot be easily done as far as I know.
+_poudriere_set_list() {
+    compopt -o default # XXX
+}
+
+_poudriere()
+{
+    local cur prev words cword
+    _init_completion || return
+
+    local command_list=(bulk distclean daemon help image jail logclean \
+        ports pkgclean options queue status testport version)
+
+    # Is the command already selected?
+    local pipe_separated_command_list="$(tr ' ' '|' <<< "${command_list[@]}")"
+    local selected_command=
+    for (( i=0 ; i < "${#words[@]}" ; i++ )); do
+        word="${words[$i]}"
+        if [[ $word =~ $pipe_separated_command_list ]]; then
+            if [[ $i > 0 ]] && [[ ${words[$(( i - 1 ))]} =~ -e ]]; then
+                continue
+            else
+                selected_command="$word"
+                break
+            fi
+        fi
+    done
+
+    if [[ -z $selected_command ]]; then
+        case "$prev" in
+            -e)
+                _filedir
+                ;;
+            *)
+                COMPREPLY=($(compgen -W "${command_list[*]}" -- "$cur"))
+                ;;
+        esac
+    else
+        case "$selected_command" in
+            bulk)
+                ;;
+            distclean)
+                ;;
+            daemon)
+                ;;
+            help)
+                ;;
+            image)
+                ;;
+            jail)
+                case "$prev" in
+                    -J)
+                        COMPREPLY=($(compgen -W "$(seq 1 $(sysctl -n hw.ncpu))" -- "$cur"))
+                        ;;
+                    -j)
+                        # XXX: A little bit slow due to poudriere jail -l.
+                        COMPREPLY=($(compgen -W "$(poudriere jail -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+                        ;;
+                    -v)
+                        _poudriere_freebsd_version
+                        ;;
+                    -a)
+                        # XXX: It might be non exhaustive.
+                        COMPREPLY=($(compgen -W "amd64 i386" -- "$cur"))
+                        ;;
+                    # TODO: -f) ;;
+                    # TODO: -K) ;;
+                    -M)
+                        compopt -o default
+                        ;;
+                    -m)
+                        # TODO: Complete paths for src= and tar=.
+                        COMPREPLY=($(compgen -W "allbsd ftp-archive ftp git \
+                            http null src= svn svn+file svn+http svn+https \
+                            svn+ssh tar= url=" -- "$cur"))
+                        if [[ ${#COMPREPLY[@]} == 1 && $COMPREPLY == *= ]]; then
+                            compopt -o nospace
+                        fi
+                        ;;
+                    -P)
+                        compopt -o default
+                        ;;
+                    -S)
+                        compopt -o default
+                        ;;
+                    -t)
+                        _poudriere_freebsd_version
+                        ;;
+                    -C)
+                        COMPREPLY=($(compgen -W "all cache logs packages wkrdirs" -- "$cur"))
+                        ;;
+                    -p)
+                        COMPREPLY=($(compgen -W "$(poudriere ports -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+                        ;;
+                    -z)
+                        _poudriere_set_list
+                        ;;
+                esac
+                ;;
+            logclean)
+                ;;
+            ports)
+                ;;
+            pkgclean)
+                ;;
+            options)
+                ;;
+            queue)
+                ;;
+            status)
+                ;;
+            testport)
+                ;;
+            # version)
+            #     ;;
+        esac
+    fi
+    local global_opts=(-e -A -N -v)
+} &&
+complete -F _poudriere poudriere
