@@ -219,6 +219,9 @@ _poudriere()
 
             jail)
                 case "$prev" in
+                    -r)
+                        compopt -o default
+                        ;;
                     -J)
                         _poudriere_jobs_number
                         ;;
@@ -232,7 +235,13 @@ _poudriere()
                         # XXX: It might be non exhaustive.
                         COMPREPLY=($(compgen -W "amd64 i386" -- "$cur"))
                         ;;
-                    # TODO: -f) ;;
+                    -f)
+                        COMPREPLY=($(compgen -W "none $(zfs list | awk 'NR > 1{print $1}')" -- "$cur"))
+                        if [[ ${#COMPREPLY[@]} == 1 ]] && [[ $COMPREPLY != none ]]; then
+                            # XXX: Is it reasonable to assume that someone would continue to append somthing to an existing name?
+                            compopt -o nospace
+                        fi
+                        ;;
                     # TODO: -K) ;;
                     -M)
                         compopt -o default
@@ -264,8 +273,10 @@ _poudriere()
                     -z)
                         _poudriere_set_list
                         ;;
+                    *)
+                        COMPREPLY=($(compgen -W '-c -d -i -l -n -s -k -r -u -b -J -q -j -v -a -m -f -K -M -p -P -S -t -z -x -C -D' -- "$cur"))
+                        ;;
                 esac
-                COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                 ;;
 
             logclean)
