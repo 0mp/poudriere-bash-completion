@@ -162,8 +162,7 @@ _poudriere()
                 fi
                 ;;
 
-            daemon)
-                ;;
+            # daemon) ;;
 
             help)
                 ;;
