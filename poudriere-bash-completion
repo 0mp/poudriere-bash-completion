@@ -134,6 +134,8 @@ _poudriere()
 
                 if [[ $cur != -* ]]; then
                     _poudriee_direct_port
+                else
+                    COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                 fi
                 ;;
 
@@ -155,6 +157,8 @@ _poudriere()
 
                 if [[ $cur != -* ]]; then
                     _poudriee_direct_port
+                else
+                    COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                 fi
                 ;;
 
@@ -216,6 +220,7 @@ _poudriere()
                         _poudriere_set_list
                         ;;
                 esac
+                COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                 ;;
 
             logclean)
