@@ -164,8 +164,7 @@ _poudriere()
 
             # daemon) ;;
 
-            help)
-                ;;
+            # help) ;;
 
             image)
                 ;;
