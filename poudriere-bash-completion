@@ -243,8 +243,7 @@ _poudriere()
             testport)
                 ;;
 
-            # version)
-            #     ;;
+            # version) ;;
         esac
     fi
     local global_opts=(-e -A -N -v)
