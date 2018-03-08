@@ -48,6 +48,36 @@ _poudriere_ports_list() {
     COMPREPLY=($(compgen -W "$(poudriere ports -l | awk 'NR > 1 {print $1}')" -- "$cur"))
 }
 
+_poudriee_direct_port() {
+    # Find a ports tree to search for ports.
+    local prev_word=
+    local ports_tree=
+    # Find out if a ports tree is already specified with -p.
+    for w in ${words[@]}; do
+        if [[ $w == -p ]]; then
+            prev_word=-p
+        elif [[ $prev_word == -p ]]; then
+            ports_tree="$w"
+            break
+        fi
+    done
+    # Find out if the default try is present.
+    if [[ -z $ports_tree ]] && poudriere ports -l | awk '/^default */{found=1} END{if (found != 1) {exit 1}}'; then
+        ports_tree=default
+    elif [[ -z $ports_tree ]]; then
+        return
+    fi
+    local ports_tree_path="$(poudriere ports -l | awk -v tree=$ports_tree 'NR > 1{if (match($1, tree)) {print $5}}')"
+    # Complete port name.
+    if [[ $cur =~ .*/.* ]]; then
+        COMPREPLY=($(compgen -W "$(
+        command cd "$ports_tree_path" && LANG=C find "${cur%%/*}/" -mindepth 1 -maxdepth 1 -type d -name "${cur##*/}*"
+        )" -- "$cur"))
+    else # Complete category.
+        COMPREPLY=($(compgen -W "$(command cd "$ports_tree_path" && LANG=C find * -maxdepth 0 -type d -name '[^.A-Z]*' -prune)" -S "/" -- "$cur")) && compopt -o nospace
+    fi
+}
+
 _poudriere()
 {
     local cur prev words cword
@@ -103,33 +133,7 @@ _poudriere()
                 esac
 
                 if [[ $cur != -* ]]; then
-                    # Find a ports tree to search for ports.
-                    local prev_word=
-                    local ports_tree=
-                    # Find out if a ports tree is already specified with -p.
-                    for w in ${words[@]}; do
-                        if [[ $w == -p ]]; then
-                            prev_word=-p
-                        elif [[ $prev_word == -p ]]; then
-                            ports_tree="$w"
-                            break
-                        fi
-                    done
-                    # Find out if the default try is present.
-                    if [[ -z $ports_tree ]] && poudriere ports -l | awk '/^default */{found=1} END{if (found != 1) {exit 1}}'; then
-                        ports_tree=default
-                    elif [[ -z $ports_tree ]]; then
-                        return
-                    fi
-                    local ports_tree_path="$(poudriere ports -l | awk -v tree=$ports_tree 'NR > 1{if (match($1, tree)) {print $5}}')"
-                    # Complete port name.
-                    if [[ $cur =~ .*/.* ]]; then
-                        COMPREPLY=($(compgen -W "$(
-                        command cd "$ports_tree_path" && LANG=C find "${cur%%/*}/" -mindepth 1 -maxdepth 1 -type d -name "${cur##*/}*"
-                        )" -- "$cur"))
-                    else # Complete category.
-                        COMPREPLY=($(compgen -W "$(command cd "$ports_tree_path" && LANG=C find * -maxdepth 0 -type d -name '[^.A-Z]*' -prune)" -S "/" -- "$cur")) && compopt -o nospace
-                    fi
+                    _poudriee_direct_port
                 fi
                 ;;
 
