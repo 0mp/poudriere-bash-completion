@@ -176,6 +176,45 @@ _poudriere()
             # help) ;;
 
             image)
+                case "$prev" in
+                    -c)
+                        compopt -o default
+                        ;;
+                    -f)
+                        compopt -o default
+                        ;;
+                    -h)
+                        compopt -o default
+                        ;;
+                    -j)
+                        _poudriere_jails_list
+                        ;;
+                    -m)
+                        compopt -o default
+                        ;;
+                    -o)
+                        compopt -o default
+                        ;;
+                    -p)
+                        _poudriere_ports_list
+                        ;;
+                    -s)
+                        # XXX: Maybe there is a better way to complete size.
+                        compopt -o default
+                        ;;
+                    -t)
+                        COMPREPLY=($(compgen -W 'iso iso+mfs iso+zmfs usb usb+mfs usb+zmfs rawdisk zrawdisk tar firmware rawfirmware embedded' -- "$cur"))
+                        ;;
+                    -X)
+                        compopt -o default
+                        ;;
+                    -z)
+                        _poudriere_set_list
+                        ;;
+                    *)
+                        COMPREPLY=($(compgen -W '-c -f -h -j -m -n -o -p -s -t -X -z' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             jail)
