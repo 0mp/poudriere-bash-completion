@@ -245,6 +245,5 @@ _poudriere()
             # version) ;;
         esac
     fi
-    local global_opts=(-e -A -N -v)
 } &&
 complete -F _poudriere poudriere
