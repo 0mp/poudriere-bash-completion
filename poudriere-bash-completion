@@ -138,6 +138,24 @@ _poudriere()
                 ;;
 
             distclean)
+                case "$prev" in
+                    -f)
+                        COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
+                        return
+                        ;;
+                    -J)
+                        _poudriere_jobs_number
+                        return
+                        ;;
+                    -p)
+                        _poudriere_ports_list
+                        return
+                        ;;
+                esac
+
+                if [[ $cur != -* ]]; then
+                    _poudriee_direct_port
+                fi
                 ;;
 
             daemon)
