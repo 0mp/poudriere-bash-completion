@@ -48,6 +48,11 @@ _poudriere_ports_list() {
     COMPREPLY=($(compgen -W "$(poudriere ports -l | awk 'NR > 1 {print $1}')" -- "$cur"))
 }
 
+# XXX: A little bit slow due to poudriere jail -l.
+_poudriere_jails_list() {
+    COMPREPLY=($(compgen -W "$(poudriere jail -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+}
+
 _poudriee_direct_port() {
     # Find a ports tree to search for ports.
     local prev_word=
@@ -179,8 +184,7 @@ _poudriere()
                         _poudriere_jobs_number
                         ;;
                     -j)
-                        # XXX: A little bit slow due to poudriere jail -l.
-                        COMPREPLY=($(compgen -W "$(poudriere jail -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+                        _poudriere_jails_list
                         ;;
                     -v)
                         _poudriere_freebsd_version
