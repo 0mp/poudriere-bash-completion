@@ -107,7 +107,11 @@ _poudriere()
                 _filedir
                 ;;
             *)
-                COMPREPLY=($(compgen -W "${command_list[*]}" -- "$cur"))
+                if [[ $cur == -* ]]; then
+                    COMPREPLY=($(compgen -W '-e -A -N -v' -- "$cur"))
+                else
+                    COMPREPLY=($(compgen -W "${command_list[*]}" -- "$cur"))
+                fi
                 ;;
         esac
     else
