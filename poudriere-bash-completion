@@ -40,6 +40,10 @@ _poudriere_set_list() {
     compopt -o default # XXX
 }
 
+_poudriere_ports_list() {
+    COMPREPLY=($(compgen -W "$(poudriere ports -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+}
+
 _poudriere()
 {
     local cur prev words cword
@@ -127,7 +131,7 @@ _poudriere()
                         COMPREPLY=($(compgen -W "all cache logs packages wkrdirs" -- "$cur"))
                         ;;
                     -p)
-                        COMPREPLY=($(compgen -W "$(poudriere ports -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+                        _poudriere_ports_list
                         ;;
                     -z)
                         _poudriere_set_list
