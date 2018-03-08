@@ -132,14 +132,19 @@ _poudriere()
                     fi
                 fi
                 ;;
+
             distclean)
                 ;;
+
             daemon)
                 ;;
+
             help)
                 ;;
+
             image)
                 ;;
+
             jail)
                 case "$prev" in
                     -J)
@@ -190,20 +195,28 @@ _poudriere()
                         ;;
                 esac
                 ;;
+
             logclean)
                 ;;
+
             ports)
                 ;;
+
             pkgclean)
                 ;;
+
             options)
                 ;;
+
             queue)
                 ;;
+
             status)
                 ;;
+
             testport)
                 ;;
+
             # version)
             #     ;;
         esac
