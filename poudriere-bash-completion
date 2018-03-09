@@ -313,6 +313,28 @@ _poudriere()
                 ;;
 
             ports)
+                case "$prev" in
+                    -B)
+                        # XXX: Maybe there are not that many branches and it is possible to actually list them here.
+                        compopt -o default
+                        ;;
+                    -M)
+                        compopt -o default
+                        ;;
+                    -f)
+                        _poudriere_filesystem
+                        ;;
+                    -m)
+                        COMPREPLY=($(compgen -W 'portsnap git null svn' -- "$cur"))
+                        COMPREPLY+=($(compgen -W "http https file ssh" -P 'svn+' -- "$cur"))
+                        ;;
+                    -p)
+                        _poudriere_ports_list
+                        ;;
+                    *)
+                        COMPREPLY=($(compgen -W '-c -d -l -u -B -F -M -f -k -m -n -p -q -v' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             pkgclean)
