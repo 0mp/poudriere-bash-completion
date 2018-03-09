@@ -397,8 +397,7 @@ _poudriere()
                 esac
                 ;;
 
-            queue)
-                ;;
+            # TODO: queue) ;;
 
             status)
                 ;;
