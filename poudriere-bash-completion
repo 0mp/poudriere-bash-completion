@@ -28,6 +28,7 @@
 #
 # ---
 # Version: 0.2.0
+# Upstream: https://github.com/0mp/poudriere-bash-completion/
 
 _poudriere_absolute_path() {
     COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
