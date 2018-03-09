@@ -173,23 +173,22 @@ _poudriere()
                 case "$prev" in
                     -f)
                         _poudriere_absolute_path
-                        return
                         ;;
                     -J)
                         _poudriere_jobs_number
-                        return
                         ;;
                     -p)
                         _poudriere_ports_list
-                        return
+                        ;;
+                    *)
+                        if [[ $cur != -* ]]; then
+                            _poudriere_direct_port
+                        fi
+                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                            COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
+                        fi
                         ;;
                 esac
-
-                if [[ $cur != -* ]]; then
-                    _poudriere_direct_port
-                else
-                    COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
-                fi
                 ;;
 
             # daemon) ;;
