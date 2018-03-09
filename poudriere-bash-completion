@@ -66,7 +66,7 @@ _poudriere_jails_list() {
     COMPREPLY=($(compgen -W "$(poudriere jail -l | awk 'NR > 1 {print $1}')" -- "$cur"))
 }
 
-_poudriee_direct_port() {
+_poudriere_direct_port() {
     # Find a ports tree to search for ports.
     local prev_word=
     local ports_tree=
@@ -155,7 +155,7 @@ _poudriere()
                 esac
 
                 if [[ $cur != -* ]]; then
-                    _poudriee_direct_port
+                    _poudriere_direct_port
                 else
                     COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                 fi
@@ -178,7 +178,7 @@ _poudriere()
                 esac
 
                 if [[ $cur != -* ]]; then
-                    _poudriee_direct_port
+                    _poudriere_direct_port
                 else
                     COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                 fi
@@ -360,7 +360,7 @@ _poudriere()
                         ;;
                     *)
                         if [[ $cur != -* ]]; then
-                            _poudriee_direct_port
+                            _poudriere_direct_port
                         fi
                         if [[ ${COMPREPLY[@]} -eq 0 ]]; then
                             COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
@@ -388,7 +388,7 @@ _poudriere()
                         ;;
                     *)
                         if [[ $cur != -* ]]; then
-                            _poudriee_direct_port
+                            _poudriere_direct_port
                         fi
                         if [[ ${COMPREPLY[@]} -eq 0 ]]; then
                             COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
