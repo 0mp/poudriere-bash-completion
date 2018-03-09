@@ -221,48 +221,36 @@ _poudriere()
 
             jail)
                 case "$prev" in
-                    -r)
-                        compopt -o default
-                        ;;
-                    -J)
-                        _poudriere_jobs_number
-                        ;;
-                    -j)
-                        _poudriere_jails_list
-                        ;;
-                    -v)
-                        _poudriere_freebsd_version
-                        ;;
                     -a)
                         _poudriere_architecture
+                        ;;
+                    -C)
+                        COMPREPLY=($(compgen -W "all cache logs packages wkrdirs" -- "$cur"))
                         ;;
                     -f)
                         _poudriere_filesystem
                         ;;
-                    # TODO: -K) ;;
-                    -M)
+                    -j)
+                        _poudriere_jails_list
+                        ;;
+                    -J)
+                        _poudriere_jobs_number
+                        ;;
+                    -K|-r|-M|-P|-S)
                         compopt -o default
+                        ;;
+                    -v)
+                        _poudriere_freebsd_version
                         ;;
                     -m)
                         # TODO: Complete paths for src= and tar=.
-                        COMPREPLY=($(compgen -W "allbsd ftp-archive ftp git \
-                            http null src= svn svn+file svn+http svn+https \
-                            svn+ssh tar= url=" -- "$cur"))
+                        COMPREPLY=($(compgen -W "allbsd ftp-archive ftp git http null src= svn svn+file svn+http svn+https svn+ssh tar= url=" -- "$cur"))
                         if [[ ${#COMPREPLY[@]} == 1 && $COMPREPLY == *= ]]; then
                             compopt -o nospace
                         fi
                         ;;
-                    -P)
-                        compopt -o default
-                        ;;
-                    -S)
-                        compopt -o default
-                        ;;
                     -t)
                         _poudriere_freebsd_version
-                        ;;
-                    -C)
-                        COMPREPLY=($(compgen -W "all cache logs packages wkrdirs" -- "$cur"))
                         ;;
                     -p)
                         _poudriere_ports_list
@@ -271,7 +259,7 @@ _poudriere()
                         _poudriere_set_list
                         ;;
                     *)
-                        COMPREPLY=($(compgen -W '-c -d -i -l -n -s -k -r -u -b -J -q -j -v -a -m -f -K -M -p -P -S -t -z -x -C -D' -- "$cur"))
+                        COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                         ;;
                 esac
                 ;;
