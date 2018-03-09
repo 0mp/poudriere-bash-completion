@@ -266,15 +266,15 @@ _poudriere()
 
             logclean)
                 case "$prev" in
-                    -N)
-                        COMPREPLY=($(compgen -W "0 1 2 3 4 5 6 7 8 9"))
-                        compopt -o nospace
+                    -B)
+                        _poudriere_buildname
                         ;;
                     -j)
                         _poudriere_jails_list
                         ;;
-                    -B)
-                        _poudriere_buildname
+                    -N)
+                        COMPREPLY=($(compgen -W "0 1 2 3 4 5 6 7 8 9"))
+                        compopt -o nospace
                         ;;
                     -p)
                         _poudriere_ports_list
@@ -287,7 +287,7 @@ _poudriere()
                             COMPREPLY=(0 1 2 3 4 5 6 7 8 9)
                             compopt -o nospace
                         else
-                            COMPREPLY=($(compgen -W '0 1 2 3 4 5 6 7 8 9 -a -N -j -n -B -p -y -v -z' -- "$cur"))
+                            COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command) 0 1 2 3 4 5 6 7 8 9" -- "$cur"))
                         fi
                         ;;
                 esac
