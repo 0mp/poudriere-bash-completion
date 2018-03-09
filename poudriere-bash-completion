@@ -53,6 +53,7 @@ _poudriere_architecture() {
     COMPREPLY=($(compgen -W 'amd64 i386' -- "$cur"))
 }
 
+# TODO: Support the second argument.
 _poudriere_jobs_number() {
     COMPREPLY=($(compgen -W "$(seq 1 $(sysctl -n hw.ncpu))" -- "$cur"))
 }
