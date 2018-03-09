@@ -398,9 +398,6 @@ _poudriere()
 
             testport)
                 case "$prev" in
-                    -o)
-                        _poudriere_direct_port
-                        ;;
                     -B)
                         _poudriere_buildname
                         ;;
@@ -409,6 +406,9 @@ _poudriere()
                         ;;
                     -J)
                         _poudriere_jobs_number
+                        ;;
+                    -o)
+                        _poudriere_direct_port
                         ;;
                     -p)
                         _poudriere_ports_list
