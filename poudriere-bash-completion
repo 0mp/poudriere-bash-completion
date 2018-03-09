@@ -67,6 +67,11 @@ _poudriere_jails_list() {
     COMPREPLY=($(compgen -W "$(poudriere jail -l | awk 'NR > 1 {print $1}')" -- "$cur"))
 }
 
+# TODO: Parse poudriere status.
+_poudriere_buildname() {
+    compopt -o default
+}
+
 _poudriere_direct_port() {
     # Find a ports tree to search for ports.
     local prev_word=
@@ -138,8 +143,7 @@ _poudriere()
             bulk)
                 case "$prev" in
                     -B)
-                        compopt -o default
-                        return
+                        _poudriere_buildname
                         ;;
                     -f)
                         COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
@@ -298,7 +302,7 @@ _poudriere()
                         _poudriere_jails_list
                         ;;
                     -B)
-                        compopt -o default
+                        _poudriere_buildname
                         ;;
                     -p)
                         _poudriere_ports_list
@@ -403,7 +407,7 @@ _poudriere()
             status)
                 case "$prev" in
                     -B)
-                        compopt -o default
+                        _poudriere_buildname
                         ;;
                     -j)
                         _poudriere_jails_list
@@ -427,7 +431,7 @@ _poudriere()
                         _poudriere_direct_port
                         ;;
                     -B)
-                        compopt -o default
+                        _poudriere_buildname
                         ;;
                     -j)
                         _poudriere_jails_list
