@@ -72,6 +72,10 @@ _poudriere_buildname() {
     compopt -o default
 }
 
+_poudriere_absolute_path() {
+    COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
+}
+
 _poudriere_direct_port() {
     # Find a ports tree to search for ports.
     local prev_word=
@@ -146,7 +150,7 @@ _poudriere()
                         _poudriere_buildname
                         ;;
                     -f)
-                        COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
+                        _poudriere_absolute_path
                         return
                         ;;
                     -J)
@@ -169,7 +173,7 @@ _poudriere()
             distclean)
                 case "$prev" in
                     -f)
-                        COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
+                        _poudriere_absolute_path
                         return
                         ;;
                     -J)
@@ -349,7 +353,7 @@ _poudriere()
             pkgclean)
                 case "$prev" in
                     -f)
-                        COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
+                        _poudriere_absolute_path
                         ;;
                     -j)
                         _poudriere_jails_list
@@ -377,7 +381,7 @@ _poudriere()
             options)
                 case "$prev" in
                     -f)
-                        COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
+                        _poudriere_absolute_path
                         ;;
                     -a)
                         _poudriere_architecture
