@@ -370,6 +370,31 @@ _poudriere()
                 ;;
 
             options)
+                case "$prev" in
+                    -f)
+                        COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
+                        ;;
+                    -a)
+                        _poudriere_architecture
+                        ;;
+                    -j)
+                        _poudriere_jails_list
+                        ;;
+                    -p)
+                        _poudriere_ports_list
+                        ;;
+                    -z)
+                        _poudriere_set_list
+                        ;;
+                    *)
+                        if [[ $cur != -* ]]; then
+                            _poudriee_direct_port
+                        fi
+                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                            COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
+                        fi
+                        ;;
+                esac
                 ;;
 
             queue)
