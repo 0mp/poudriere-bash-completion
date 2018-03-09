@@ -347,11 +347,11 @@ _poudriere()
 
             options)
                 case "$prev" in
-                    -f)
-                        _poudriere_absolute_path
-                        ;;
                     -a)
                         _poudriere_architecture
+                        ;;
+                    -f)
+                        _poudriere_absolute_path
                         ;;
                     -j)
                         _poudriere_jails_list
