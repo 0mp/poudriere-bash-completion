@@ -27,15 +27,15 @@
 # SUCH DAMAGE.
 #
 # ---
-# Version: 0.1.0
+# Version: 0.2.0
 
 _poudriere_absolute_path() {
     COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
 }
 
-# XXX: It might be non exhaustive.
+# XXX: It does not complete the architectures available thanks to the QEMU option.
 _poudriere_architecture() {
-    COMPREPLY=($(compgen -W 'amd64 i386' -- "$cur"))
+    COMPREPLY=($(compgen -W "$(sysctl -n kern.supported_archs)" -- "$cur"))
 }
 
 # TODO: Parse poudriere status.
