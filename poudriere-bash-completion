@@ -191,7 +191,7 @@ _poudriere()
                         if [[ $cur != -* ]]; then
                             _poudriere_direct_port
                         fi
-                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                        if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
                             COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                         fi
                         ;;
@@ -213,7 +213,7 @@ _poudriere()
                         if [[ $cur != -* ]]; then
                             _poudriere_direct_port
                         fi
-                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                        if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
                             COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                         fi
                         ;;
@@ -367,7 +367,7 @@ _poudriere()
                         if [[ $cur != -* ]]; then
                             _poudriere_direct_port
                         fi
-                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                        if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
                             COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                         fi
                         ;;
@@ -395,7 +395,7 @@ _poudriere()
                         if [[ $cur != -* ]]; then
                             _poudriere_direct_port
                         fi
-                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                        if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
                             COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command)" -- "$cur"))
                         fi
                         ;;
@@ -447,7 +447,7 @@ _poudriere()
                         if [[ $cur != -* ]]; then
                             _poudriere_direct_port
                         fi
-                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                        if [[ ${#COMPREPLY[@]} -eq 0 ]]; then
                             COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command) -o" -- "$cur"))
                         fi
                         ;;
