@@ -422,6 +422,34 @@ _poudriere()
                 ;;
 
             testport)
+                case "$prev" in
+                    -o)
+                        _poudriere_direct_port
+                        ;;
+                    -B)
+                        compopt -o default
+                        ;;
+                    -j)
+                        _poudriere_jails_list
+                        ;;
+                    -J)
+                        _poudriere_jobs_number
+                        ;;
+                    -p)
+                        _poudriere_ports_list
+                        ;;
+                    -z)
+                        _poudriere_set_list
+                        ;;
+                    *)
+                        if [[ $cur != -* ]]; then
+                            _poudriere_direct_port
+                        fi
+                        if [[ ${COMPREPLY[@]} -eq 0 ]]; then
+                            COMPREPLY=($(compgen -W "$(_parse_help poudriere $selected_command) -o" -- "$cur"))
+                        fi
+                        ;;
+                esac
                 ;;
 
             # version) ;;
