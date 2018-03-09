@@ -35,6 +35,14 @@ _poudriere_freebsd_version() {
     COMPREPLY+=($(compgen -W "12.0" -S '-CURRENT' -- "$cur"))
 }
 
+_poudriere_filesystem() {
+    COMPREPLY=($(compgen -W "none $(zfs list | awk 'NR > 1{print $1}')" -- "$cur"))
+    if [[ ${#COMPREPLY[@]} == 1 ]] && [[ $COMPREPLY != none ]]; then
+        # XXX: Is it reasonable to assume that someone would continue to append somthing to an existing name?
+        compopt -o nospace
+    fi
+}
+
 # TODO: It cannot be easily done as far as I know.
 _poudriere_set_list() {
     compopt -o default # XXX
@@ -236,11 +244,7 @@ _poudriere()
                         COMPREPLY=($(compgen -W "amd64 i386" -- "$cur"))
                         ;;
                     -f)
-                        COMPREPLY=($(compgen -W "none $(zfs list | awk 'NR > 1{print $1}')" -- "$cur"))
-                        if [[ ${#COMPREPLY[@]} == 1 ]] && [[ $COMPREPLY != none ]]; then
-                            # XXX: Is it reasonable to assume that someone would continue to append somthing to an existing name?
-                            compopt -o nospace
-                        fi
+                        _poudriere_filesystem
                         ;;
                     # TODO: -K) ;;
                     -M)
