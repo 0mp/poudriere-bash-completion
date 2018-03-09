@@ -26,26 +26,8 @@
 # OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
-_poudriere_freebsd_version() {
-    # XXX: It might be non exhaustive.
-    # For example it does not include options like:
-    # stable/11, stable/10@123456
-    COMPREPLY+=($(compgen -W "10.3 10.4 11.1" -S '-RELEASE' -- "$cur"))
-    COMPREPLY+=($(compgen -W "10.4 11.1" -S '-STABLE' -- "$cur"))
-    COMPREPLY+=($(compgen -W "12.0" -S '-CURRENT' -- "$cur"))
-}
-
-_poudriere_filesystem() {
-    COMPREPLY=($(compgen -W "none $(zfs list | awk 'NR > 1{print $1}')" -- "$cur"))
-    if [[ ${#COMPREPLY[@]} == 1 ]] && [[ $COMPREPLY != none ]]; then
-        # XXX: Is it reasonable to assume that someone would continue to append somthing to an existing name?
-        compopt -o nospace
-    fi
-}
-
-# TODO: It cannot be easily done as far as I know.
-_poudriere_set_list() {
-    compopt -o default # XXX
+_poudriere_absolute_path() {
+    COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
 }
 
 # XXX: It might be non exhaustive.
@@ -53,27 +35,9 @@ _poudriere_architecture() {
     COMPREPLY=($(compgen -W 'amd64 i386' -- "$cur"))
 }
 
-# TODO: Support the second argument.
-_poudriere_jobs_number() {
-    COMPREPLY=($(compgen -W "$(seq 1 $(sysctl -n hw.ncpu))" -- "$cur"))
-}
-
-_poudriere_ports_list() {
-    COMPREPLY=($(compgen -W "$(poudriere ports -l | awk 'NR > 1 {print $1}')" -- "$cur"))
-}
-
-# XXX: A little bit slow due to poudriere jail -l.
-_poudriere_jails_list() {
-    COMPREPLY=($(compgen -W "$(poudriere jail -l | awk 'NR > 1 {print $1}')" -- "$cur"))
-}
-
 # TODO: Parse poudriere status.
 _poudriere_buildname() {
     compopt -o default
-}
-
-_poudriere_absolute_path() {
-    COMPREPLY=($(compgen -f "${cur:-/}" -- "$cur"))
 }
 
 _poudriere_direct_port() {
@@ -104,6 +68,42 @@ _poudriere_direct_port() {
     else # Complete category.
         COMPREPLY=($(compgen -W "$(command cd "$ports_tree_path" && LANG=C find * -maxdepth 0 -type d -name '[^.A-Z]*' -prune)" -S "/" -- "$cur")) && compopt -o nospace
     fi
+}
+
+_poudriere_filesystem() {
+    COMPREPLY=($(compgen -W "none $(zfs list | awk 'NR > 1{print $1}')" -- "$cur"))
+    if [[ ${#COMPREPLY[@]} == 1 ]] && [[ $COMPREPLY != none ]]; then
+        # XXX: Is it reasonable to assume that someone would continue to append somthing to an existing name?
+        compopt -o nospace
+    fi
+}
+
+_poudriere_freebsd_version() {
+    # XXX: It might be non exhaustive.
+    # For example it does not include options like:
+    # stable/11, stable/10@123456
+    COMPREPLY+=($(compgen -W "10.3 10.4 11.1" -S '-RELEASE' -- "$cur"))
+    COMPREPLY+=($(compgen -W "10.4 11.1" -S '-STABLE' -- "$cur"))
+    COMPREPLY+=($(compgen -W "12.0" -S '-CURRENT' -- "$cur"))
+}
+
+# XXX: A little bit slow due to poudriere jail -l.
+_poudriere_jails_list() {
+    COMPREPLY=($(compgen -W "$(poudriere jail -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+}
+
+# TODO: Support the second argument.
+_poudriere_jobs_number() {
+    COMPREPLY=($(compgen -W "$(seq 1 $(sysctl -n hw.ncpu))" -- "$cur"))
+}
+
+_poudriere_ports_list() {
+    COMPREPLY=($(compgen -W "$(poudriere ports -l | awk 'NR > 1 {print $1}')" -- "$cur"))
+}
+
+# TODO: It cannot be easily done as far as I know.
+_poudriere_set_list() {
+    compopt -o default # XXX
 }
 
 _poudriere()
