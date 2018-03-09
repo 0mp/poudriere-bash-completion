@@ -53,7 +53,7 @@ _poudriere_direct_port() {
             break
         fi
     done
-    # Find out if the default try is present.
+    # Find out if the default tree is present.
     if [[ -z $ports_tree ]] && poudriere ports -l | awk '/^default */{found=1} END{if (found != 1) {exit 1}}'; then
         ports_tree=default
     elif [[ -z $ports_tree ]]; then
