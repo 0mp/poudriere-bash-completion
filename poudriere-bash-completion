@@ -400,6 +400,24 @@ _poudriere()
             # TODO: queue) ;;
 
             status)
+                case "$prev" in
+                    -B)
+                        compopt -o default
+                        ;;
+                    -j)
+                        _poudriere_jails_list
+                        ;;
+                    -p)
+                        _poudriere_ports_list
+                        ;;
+                    -z)
+                        _poudriere_set_list
+                        ;;
+                    *)
+                        # XXX: _parse_help does not work for some reason.
+                        COMPREPLY=($(compgen -W '-a -b -B -c -f -H -j -l -p -r -z' -- "$cur"))
+                        ;;
+                esac
                 ;;
 
             testport)
