@@ -376,8 +376,6 @@ _poudriere()
                 esac
                 ;;
 
-            # TODO: queue) ;;
-
             status)
                 case "$prev" in
                     -B)
