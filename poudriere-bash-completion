@@ -48,6 +48,11 @@ _poudriere_set_list() {
     compopt -o default # XXX
 }
 
+# XXX: It might be non exhaustive.
+_poudriere_architecture() {
+    COMPREPLY=($(compgen -W 'amd64 i386' -- "$cur"))
+}
+
 _poudriere_jobs_number() {
     COMPREPLY=($(compgen -W "$(seq 1 $(sysctl -n hw.ncpu))" -- "$cur"))
 }
@@ -240,8 +245,7 @@ _poudriere()
                         _poudriere_freebsd_version
                         ;;
                     -a)
-                        # XXX: It might be non exhaustive.
-                        COMPREPLY=($(compgen -W "amd64 i386" -- "$cur"))
+                        _poudriere_architecture
                         ;;
                     -f)
                         _poudriere_filesystem
