@@ -103,7 +103,7 @@ _poudriere_ports_list() {
 
 # TODO: It cannot be easily done as far as I know.
 _poudriere_set_list() {
-    compopt -o default # XXX
+    compopt -o default
 }
 
 _poudriere()
