@@ -47,6 +47,7 @@ _poudriere_direct_port() {
     # Find a ports tree to search for ports.
     local prev_word=
     local ports_tree=
+    local w
     # Find out if a ports tree is already specified with -p.
     for w in ${words[@]}; do
         if [[ $w == -p ]]; then
@@ -144,6 +145,7 @@ _poudriere()
     # Is the command already selected?
     local pipe_separated_command_list="$(tr ' ' '|' <<< "${command_list[@]}")"
     local selected_command=
+    local i
     for (( i=0 ; i < "${#words[@]}" ; i++ )); do
         word="${words[$i]}"
         if [[ $word =~ $pipe_separated_command_list ]]; then
